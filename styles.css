@@ -1,0 +1,417 @@
+/* カスタムスタイル - シックなピンクパステルデザイン */
+
+/* 背景グラデーション - ダークテーマ */
+html {
+    background: #1a1a1a;
+    height: 100%;
+}
+
+body {
+    background: #1a1a1a;
+    min-height: 100vh;
+    height: 100%;
+    font-family: 'Inter', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* iOSのステータスバー領域の背景色を統一 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top);
+    background: #1a1a1a;
+    z-index: -1;
+}
+
+/* iOSのホームインジケーター領域の背景色を統一 */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-bottom);
+    background: #1a1a1a;
+    z-index: -1;
+}
+
+/* コンテナの背景を完全にカバー */
+.container-fluid {
+    background: #1a1a1a;
+    min-height: 100vh;
+    height: 100%;
+}
+
+/* カードのスタイル - ダークテーマ */
+.card {
+    border-radius: 8px !important;
+    border: 1px solid rgba(0, 123, 255, 0.3);
+    backdrop-filter: blur(10px);
+    background: rgba(30, 30, 30, 0.9);
+    color: #ffffff;
+}
+
+/* カードヘッダーのグラデーション - 青系 */
+.card-header {
+    border-radius: 8px 8px 0 0 !important;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    border: none !important;
+    padding: 1rem 1.5rem;
+    color: #ffffff !important;
+}
+
+/* 検索ボタンのアニメーション */
+.btn-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    border: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    padding: 0.6rem 1.5rem;
+}
+
+/* ホバー効果を削除 */
+
+.btn-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+/* 入力フィールドのスタイル - ダークテーマ */
+.form-control {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    background: rgba(40, 40, 40, 0.8);
+    color: #ffffff;
+    font-weight: 400;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: rgba(45, 45, 45, 0.95);
+    color: #ffffff;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 400;
+}
+
+/* アラートのスタイル - ダークテーマ */
+.alert {
+    border-radius: 6px !important;
+    border: none !important;
+    padding: 1rem 1.5rem;
+    font-weight: 400;
+    font-size: 0.9rem;
+}
+
+.alert-info {
+    background: rgba(0, 123, 255, 0.1);
+    border: 1px solid rgba(0, 123, 255, 0.3);
+    color: #66b3ff;
+}
+
+.alert-warning {
+    background: rgba(255, 193, 7, 0.1);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #ff6b6b;
+}
+
+/* バッジのスタイル */
+.badge {
+    border-radius: 16px;
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.badge.bg-light {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* コードブロックのスタイル */
+code {
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+/* レスポンシブ調整 */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+
+    .card-body {
+        padding: 1rem !important;
+    }
+
+    .row.g-2>div {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* スクロールバーはデフォルトのまま */
+
+/* ローディングスピナーのカスタマイズ */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+}
+
+/* カードの色バリエーション - 青系に統一 */
+.card-header.bg-primary,
+.card-header.bg-success,
+.card-header.bg-info,
+.card-header.bg-warning,
+.card-header.bg-danger,
+.card-header.bg-secondary,
+.card-header.bg-light,
+.card-header.bg-dark {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+    color: #ffffff !important;
+}
+
+/* テキストカラーの調整 */
+.text-primary {
+    color: #0d6efd !important;
+}
+
+.text-success {
+    color: #198754 !important;
+}
+
+.text-info {
+    color: #0dcaf0 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-secondary {
+    color: #6c757d !important;
+}
+
+.text-light {
+    color: #f8f9fa !important;
+}
+
+.text-dark {
+    color: #212529 !important;
+}
+
+/* 検索方法選択ボタンのスタイル */
+.btn-group .btn-check:checked+.btn-outline-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #ffffff;
+}
+
+.btn-group .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+/* ホバー効果を削除 */
+
+/* セレクトボックスのスタイル */
+.form-select {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    background: rgba(40, 40, 40, 0.8);
+    color: #ffffff;
+    font-weight: 400;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+}
+
+.form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    background: rgba(45, 45, 45, 0.95);
+    color: #ffffff;
+}
+
+.form-select option {
+    background: #2d2d2d;
+    color: #ffffff;
+}
+
+/* 検索中の入力フィールドスタイル */
+.form-control:disabled {
+    background-color: rgba(40, 40, 40, 0.8) !important;
+    opacity: 0.8 !important;
+    color: #ffffff !important;
+}
+
+/* アニメーション効果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* モバイル表示の追加修正 */
+@media (max-width: 768px) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .card {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    /* 検索結果のカードもモバイル対応 */
+    .results-container .card {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    /* バナーの余白をモバイルでも調整 */
+    #result-banner {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
+
+/* Safari専用の修正 */
+@supports (-webkit-appearance: none) {
+    html {
+        background: #1a1a1a !important;
+    }
+
+    body {
+        background: #1a1a1a !important;
+    }
+
+    .container-fluid {
+        background: #1a1a1a !important;
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* カードの遅延アニメーション */
+.card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.card:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.card:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.card:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.card:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+/* ホバー効果を削除 */
+
+/* フォーカス状態の改善 */
+.btn:focus,
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25) !important;
+}
+
+/* テキストの読みやすさ向上 */
+.card-body p,
+.card-body div {
+    line-height: 1.6;
+}
+
+/* レスポンシブグリッドの調整 */
+@media (max-width: 576px) {
+    .col-4 {
+        flex: 0 0 30%;
+        max-width: 30%;
+    }
+
+    .col-8 {
+        flex: 0 0 70%;
+        max-width: 70%;
+    }
+}
+
+/* result要素の余白を0に設定 */
+#result {
+    padding: 0;
+    margin: 0;
+}
+
+/* バナーの余白を結果のカードと揃える */
+#result-banner {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+/* 検索結果の詳細情報の縦余白を増やす */
+.card-body .row {
+    margin-bottom: 1.5rem;
+}
+
+.card-body .row:last-child {
+    margin-bottom: 0;
+}
+
+.card-body .col-md-6 {
+    margin-bottom: 1rem;
+}
+
+.card-body h6 {
+    margin-bottom: 0.75rem !important;
+}
+
+.card-body p {
+    margin-bottom: 0.5rem !important;
+}
