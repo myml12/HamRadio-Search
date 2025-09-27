@@ -16,6 +16,7 @@ async function searchRadioStation() {
     switch (searchType) {
         case 'callsign':
         case 'name':
+        case 'callsignToJCC':
             searchValue = elements.searchInput.value.trim();
             break;
         case 'area':
@@ -35,6 +36,9 @@ async function searchRadioStation() {
                 break;
             case 'area':
                 errorMessage = '地域を入力してください。';
+                break;
+            case 'callsignToJCC':
+                errorMessage = 'コールサインを入力してください。';
                 break;
         }
         showError(errorMessage);
@@ -59,7 +63,11 @@ async function searchRadioStation() {
         const data = await fetchRadioStationData(searchValue, searchType, stationType);
 
         // 結果表示
-        displayResults(data, searchValue, searchType);
+        if (searchType === 'callsignToJCC') {
+            displayJCCResults(data, searchValue);
+        } else {
+            displayResults(data, searchValue, searchType);
+        }
 
     } catch (error) {
         console.error('検索エラー:', error);
@@ -77,6 +85,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 市区町村データの読み込み
     loadCityData();
+
+    // JCCデータの読み込み
+    loadJCCData();
 
     console.log('無線局等情報検索アプリが初期化されました');
 });

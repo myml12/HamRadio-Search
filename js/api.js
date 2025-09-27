@@ -7,6 +7,7 @@ async function fetchRadioStationData(searchValue, searchType, stationType) {
     // 検索パラメータの設定
     switch (searchType) {
         case 'callsign':
+        case 'callsignToJCC':
             params.append('callsign', searchValue);
             break;
         case 'name':

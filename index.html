@@ -29,7 +29,7 @@
                             <i class="bi bi-broadcast me-2" style="color: #007bff;"></i>無線局情報検索
                         </h1>
                         <p class="text-light fw-normal" style="font-size: 0.9rem; letter-spacing: 0.3px; opacity: 0.8;">
-                            コールサイン・免許人名称・地域からアマチュア無線局の詳細情報を検索できます</p>
+                            コールサイン・免許人名称・地域からアマチュア無線局の詳細情報を検索できます。<br>コールサインからJCC/JCGコードを検索できます（β版）</p>
                     </div>
                 </div>
             </div>
@@ -54,12 +54,18 @@
 
                                 <input type="radio" class="btn-check" name="searchType" id="nameSearch" value="name">
                                 <label class="btn btn-outline-primary" for="nameSearch">
-                                    <i class="bi bi-person me-1"></i>免許人名称
+                                    <i class="bi bi-person me-1"></i>名称
                                 </label>
 
                                 <input type="radio" class="btn-check" name="searchType" id="areaSearch" value="area">
                                 <label class="btn btn-outline-primary" for="areaSearch">
                                     <i class="bi bi-geo-alt me-1"></i>地域
+                                </label>
+
+                                <input type="radio" class="btn-check" name="searchType" id="callsignToJCCSearch"
+                                    value="callsignToJCC">
+                                <label class="btn btn-outline-primary" for="callsignToJCCSearch">
+                                    <i class="bi bi-broadcast me-1"></i>JCC
                                 </label>
                             </div>
                         </div>

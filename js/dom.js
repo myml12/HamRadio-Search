@@ -45,7 +45,7 @@ function initializeDOM() {
 function handleInputChange() {
     const searchType = getSelectedSearchType();
 
-    if (searchType === 'callsign') {
+    if (searchType === 'callsign' || searchType === 'callsignToJCC') {
         // コールサイン検索の場合は大文字に変換
         this.value = this.value.toUpperCase();
         // 半角英数以外の文字を除去
@@ -92,6 +92,13 @@ function updateSearchUI() {
             elements.searchInput.placeholder = '例: 東京都文京区';
             elements.searchInput.maxLength = 50;
             elements.searchHelp.textContent = '地域名もしくは地方公共団体コード（5桁）を入力してください';
+            elements.areaSelection.style.display = 'none';
+            break;
+        case 'callsignToJCC':
+            elements.searchLabel.textContent = 'コールサイン入力';
+            elements.searchInput.placeholder = '例: JL1DMA';
+            elements.searchInput.maxLength = 12;
+            elements.searchHelp.textContent = 'コールサインを入力すると、常置場所からJCC/JCGコードを検索します（β版）';
             elements.areaSelection.style.display = 'none';
             break;
     }

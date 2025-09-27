@@ -1,6 +1,7 @@
 // 地域検索関連の機能
 
 let allCities = [];
+let allJCC = [];
 
 // 市区町村データの読み込み
 async function loadCityData() {
@@ -30,6 +31,34 @@ async function loadCityData() {
     }
 }
 
+// JCCデータの読み込み
+async function loadJCCData() {
+    try {
+        const response = await fetch('JCC.csv');
+        const csvText = await response.text();
+        const lines = csvText.split('\n');
+
+        allJCC = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (line) {
+                const [code, name] = line.split(',');
+                if (code && name) {
+                    allJCC.push({
+                        code: code.trim(),
+                        name: name.trim()
+                    });
+                }
+            }
+        }
+
+        console.log(`JCCデータを読み込みました: ${allJCC.length}件`);
+    } catch (error) {
+        console.error('JCCデータの読み込みに失敗しました:', error);
+    }
+}
+
 // 地域入力の変換（完全一致のみ）
 function convertAreaInput(input) {
     if (!input) return '';
@@ -52,4 +81,28 @@ function convertAreaInput(input) {
 
     console.log('マッチする地域が見つかりませんでした');
     return '';
+}
+
+// 常置場所とJCC.csvの照合
+function matchLocationWithJCC(locationText) {
+    if (!locationText || !allJCC.length) {
+        return [];
+    }
+
+    const matches = [];
+
+    // 常置場所の文字列にJCC.csvの地域名が含まれるものを検索
+    allJCC.forEach(jcc => {
+        if (locationText.includes(jcc.name)) {
+            matches.push({
+                code: jcc.code,
+                name: jcc.name
+            });
+        }
+    });
+
+    // より具体的な地域名を優先するため、文字列の長さでソート（長い順）
+    matches.sort((a, b) => b.name.length - a.name.length);
+
+    return matches;
 }
