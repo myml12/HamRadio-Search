@@ -61,7 +61,7 @@ async function fetchUpstream(apiUrl, userAgent = DEFAULT_USER_AGENT) {
 }
 
 // APIプロキシ関数
-exports.api = functions.https.onRequest((req, res) => {
+exports.api = functions.region('asia-northeast1').https.onRequest((req, res) => {
     // CORS処理
     corsHandler(req, res, async () => {
         try {
