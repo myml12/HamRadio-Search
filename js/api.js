@@ -30,7 +30,10 @@ async function fetchRadioStationData(searchValue, searchType, stationType) {
 
         if (!response.ok) {
             const errorBody = await response.json().catch(() => null);
-            throw new Error(errorBody?.error || `HTTPエラー: ${response.status} ${response.statusText}`);
+            const message = errorBody?.details
+                ? `${errorBody.error} (${errorBody.details})`
+                : (errorBody?.error || `HTTPエラー: ${response.status} ${response.statusText}`);
+            throw new Error(message);
         }
 
         const data = await response.json();

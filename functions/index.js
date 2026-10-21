@@ -15,6 +15,8 @@ const REQUEST_TIMEOUT = 15000;
 const MAX_ATTEMPTS = 3;
 const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
 
+const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+
 function reserveRequestSlot() {
     const now = Date.now();
     const start = Math.max(now, nextRequestTime);
@@ -22,7 +24,7 @@ function reserveRequestSlot() {
     return new Promise(resolve => setTimeout(resolve, start - now));
 }
 
-async function fetchUpstream(apiUrl) {
+async function fetchUpstream(apiUrl, userAgent = DEFAULT_USER_AGENT) {
     for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
         await reserveRequestSlot();
         const controller = new AbortController();
@@ -30,7 +32,11 @@ async function fetchUpstream(apiUrl) {
         try {
             const response = await fetch(apiUrl, {
                 signal: controller.signal,
-                headers: { Accept: 'application/json' }
+                headers: {
+                    'Accept': 'application/json',
+                    'User-Agent': userAgent,
+                    'Referer': 'https://www.tele.soumu.go.jp/'
+                }
             });
             if (response.ok) return response.json();
 
@@ -97,8 +103,13 @@ exports.api = functions.https.onRequest((req, res) => {
 
             const apiUrl = `https://www.tele.soumu.go.jp/musen/list?${params.toString()}`;
 
+            const clientUserAgent = req.get('user-agent');
+            const userAgent = (clientUserAgent && clientUserAgent.includes('Mozilla/'))
+                ? clientUserAgent
+                : DEFAULT_USER_AGENT;
+
             console.log(`API Request: ${apiUrl}`);
-            const data = await fetchUpstream(apiUrl);
+            const data = await fetchUpstream(apiUrl, userAgent);
             console.log('API Response received successfully');
 
             // レスポンスをそのまま返す
