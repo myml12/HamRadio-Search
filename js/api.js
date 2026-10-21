@@ -26,15 +26,11 @@ async function fetchRadioStationData(searchValue, searchType, stationType) {
     const url = `${CONFIG.API_BASE_URL}?${params.toString()}`;
 
     try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'User-Agent': CONFIG.USER_AGENT
-            }
-        });
+        const response = await fetch(url);
 
         if (!response.ok) {
-            throw new Error(`HTTPエラー: ${response.status} ${response.statusText}`);
+            const errorBody = await response.json().catch(() => null);
+            throw new Error(errorBody?.error || `HTTPエラー: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();

@@ -9,8 +9,50 @@ const corsHandler = cors({
 });
 
 // レート制限用の変数
-let lastRequestTime = 0;
+let nextRequestTime = 0;
 const MIN_REQUEST_INTERVAL = 1000; // 1秒間隔
+const REQUEST_TIMEOUT = 15000;
+const MAX_ATTEMPTS = 3;
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+function reserveRequestSlot() {
+    const now = Date.now();
+    const start = Math.max(now, nextRequestTime);
+    nextRequestTime = start + MIN_REQUEST_INTERVAL;
+    return new Promise(resolve => setTimeout(resolve, start - now));
+}
+
+async function fetchUpstream(apiUrl) {
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        await reserveRequestSlot();
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+        try {
+            const response = await fetch(apiUrl, {
+                signal: controller.signal,
+                headers: { Accept: 'application/json' }
+            });
+            if (response.ok) return response.json();
+
+            const body = (await response.text()).slice(0, 500);
+            console.error('Upstream response', { status: response.status, attempt, body });
+            if (!RETRYABLE_STATUS.has(response.status) || attempt === MAX_ATTEMPTS) {
+                const error = new Error(`Upstream HTTP ${response.status}`);
+                error.status = RETRYABLE_STATUS.has(response.status) ? 503 : 502;
+                throw error;
+            }
+        } catch (error) {
+            if (error.status || attempt === MAX_ATTEMPTS) {
+                if (!error.status) error.status = 503;
+                throw error;
+            }
+            console.warn('Upstream request failed; retrying', { attempt, message: error.message });
+        } finally {
+            clearTimeout(timer);
+        }
+        await new Promise(resolve => setTimeout(resolve, 500 * attempt));
+    }
+}
 
 // APIプロキシ関数
 exports.api = functions.https.onRequest((req, res) => {
@@ -55,48 +97,9 @@ exports.api = functions.https.onRequest((req, res) => {
 
             const apiUrl = `https://www.tele.soumu.go.jp/musen/list?${params.toString()}`;
 
-            // レート制限チェック
-            const now = Date.now();
-            const timeSinceLastRequest = now - lastRequestTime;
-            if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
-                const waitTime = MIN_REQUEST_INTERVAL - timeSinceLastRequest;
-                console.log(`Rate limiting: waiting ${waitTime}ms`);
-                await new Promise(resolve => setTimeout(resolve, waitTime));
-            }
-            lastRequestTime = Date.now();
-
             console.log(`API Request: ${apiUrl}`);
-
-            // 総務省APIへのリクエスト
-            const response = await fetch(apiUrl, {
-                method: 'GET',
-                headers: {
-                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                    'Accept': 'application/json, text/plain, */*',
-                    'Accept-Language': 'ja,en-US;q=0.9,en;q=0.8',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'Connection': 'keep-alive',
-                    'Referer': 'https://www.tele.soumu.go.jp/',
-                    'Sec-Fetch-Dest': 'empty',
-                    'Sec-Fetch-Mode': 'cors',
-                    'Sec-Fetch-Site': 'same-origin'
-                }
-            });
-
-            if (!response.ok) {
-                console.error(`API Error: ${response.status} ${response.statusText}`);
-                console.error('Response headers:', Object.fromEntries(response.headers.entries()));
-
-                // レスポンスボディを取得してエラー詳細を確認
-                const errorText = await response.text();
-                console.error('Response body:', errorText);
-
-                throw new Error(`HTTP Error: ${response.status} ${response.statusText}`);
-            }
-
-            const data = await response.json();
+            const data = await fetchUpstream(apiUrl);
             console.log('API Response received successfully');
-            console.log('Response structure:', JSON.stringify(data, null, 2));
 
             // レスポンスをそのまま返す
             res.json(data);
@@ -105,8 +108,10 @@ exports.api = functions.https.onRequest((req, res) => {
             console.error('Cloud Function Error:', error);
 
             // エラーレスポンス
-            res.status(500).json({
-                error: 'プロキシサーバーエラーが発生しました。',
+            res.status(error.status || 500).json({
+                error: error.status === 503
+                    ? '総務省の検索サービスが一時的に利用できません。時間をおいて再度お試しください。'
+                    : '検索サービスとの通信に失敗しました。',
                 details: error.message
             });
         }
