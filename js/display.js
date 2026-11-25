@@ -308,7 +308,6 @@ function displayJCCResults(data, searchValue) {
                         </p>
                     </div>
 
-                    <p class="text-center text-light mb-3">表示は登録された無線設備の所在地に基づく参考値です。移動運用を含む実際の運用場所と、参加コンテストの規約をご確認ください。</p>
                     <!-- 市郡区番号 -->
                     <div class="mb-3">
                         ${jccMatches.length > 0 ? `
