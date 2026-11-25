@@ -298,7 +298,7 @@ function displayJCCResults(data, searchValue) {
                     <!-- コールサイン表示 -->
                     <div class="text-center mb-4">
                         <h1 class="mb-2" style="color: #ffffff; font-weight: 300; letter-spacing: 3px; font-size: 3rem;">
-                            ${escapeHtml(listInfo.callsign)}
+                            ${escapeHtml((detailInfo.identificationSignals || listInfo.callsign || '').trim())}
                         </h1>
                         <p class="mb-1" style="color: #888; font-size: 1.2rem; font-weight: 300;">
                             ${escapeHtml(listInfo.name) || '情報なし'}
