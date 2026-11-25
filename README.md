@@ -54,3 +54,10 @@ firebase deploy
 - Bootstrap 5.3.0
 - Firebase Functions
 - node-fetch
+### 市郡区番号の検索
+
+コールサイン検索で得た無線設備の所在地から、JARLの現存する市番号（JCC）、郡番号（JCG）、政令指定都市の区番号を表示します。所在地が曖昧な場合は特定しません。移動運用では登録所在地と実際の運用場所が異なるため、参加するコンテストの規約と実際の運用場所を確認してください。
+
+`contest-numbers.json` は2026年11月25日に取得した [JARL 市郡区番号リスト](https://www.jarl.org/Japanese/A_Shiryo/A-2_jcc-jcg/jcc.htm) と [区番号一覧](https://www.jarl.org/Japanese/A_Shiryo/A-2_jcc-jcg/ku-list.txt) の現存番号に基づき、既存 `JCC.csv` と `cityCode.csv` の名称を照合して作成しています。郡内の町村名は旧CSV由来のため、自治体合併や番号改定の際は公式情報とともに更新してください。都道府県名を含む所在地のみ照合し、データにない自治体や複数候補は特定しません。
+
+照合テストは `node tests/area-search.test.cjs` で実行できます。

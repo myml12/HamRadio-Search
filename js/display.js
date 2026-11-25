@@ -308,7 +308,8 @@ function displayJCCResults(data, searchValue) {
                         </p>
                     </div>
 
-                    <!-- JCC検索結果 -->
+                    <p class="text-center text-light mb-3">表示は登録された無線設備の所在地に基づく参考値です。移動運用を含む実際の運用場所と、参加コンテストの規約をご確認ください。</p>
+                    <!-- 市郡区番号 -->
                     <div class="mb-3">
                         ${jccMatches.length > 0 ? `
                             <div class="row g-2">
@@ -320,7 +321,7 @@ function displayJCCResults(data, searchValue) {
                                                     ${escapeHtml(jcc.code)}
                                                 </h3>
                                                 <p class="card-text mb-0" style="color: #ccc; font-size: 1rem; line-height: 1.3; font-weight: 300;">
-                                                    ${escapeHtml(jcc.name)}
+                                                    ${escapeHtml(jcc.type)}：${escapeHtml(jcc.name)}
                                                 </p>
                                             </div>
                                         </div>
@@ -329,8 +330,8 @@ function displayJCCResults(data, searchValue) {
                             </div>
                         ` : `
                             <div class="text-center p-4" style="background: #2a2a2a; border-radius: 6px; border: 1px solid #444;">
-                                <h5 class="mb-2" style="color: #888; font-weight: 300;">JCC検索結果なし</h5>
-                                <p class="mb-0" style="color: #666; font-weight: 300;">JCC.csvに一致する地域が見つかりませんでした</p>
+                                <h5 class="mb-2" style="color: #888; font-weight: 300;">番号を特定できません</h5>
+                                <p class="mb-0" style="color: #666; font-weight: 300;">所在地から市郡区を特定できませんでした。実際の運用場所とJARLの一覧をご確認ください。</p>
                             </div>
                         `}
                     </div>

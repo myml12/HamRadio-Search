@@ -98,7 +98,7 @@ function updateSearchUI() {
             elements.searchLabel.textContent = 'コールサイン入力';
             elements.searchInput.placeholder = '例: JL1DMA';
             elements.searchInput.maxLength = 12;
-            elements.searchHelp.textContent = 'コールサインを入力すると、常置場所からJCC/JCGコードを検索します（β版）';
+            elements.searchHelp.textContent = 'コールサインから登録所在地に対応する市・郡・区番号を調べます';
             elements.areaSelection.style.display = 'none';
             break;
     }

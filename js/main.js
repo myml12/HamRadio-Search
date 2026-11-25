@@ -1,3 +1,5 @@
+let areaDataReady;
+
 // メインロジック
 
 // 検索実行関数
@@ -24,6 +26,15 @@ async function searchRadioStation() {
             break;
     }
 
+    // データの読み込み完了を待ってから照合する
+    try {
+        if (searchType === 'area' || searchType === 'callsignToJCC') await areaDataReady;
+        if (searchType === 'area') searchValue = convertAreaInput(elements.searchInput.value.trim());
+    } catch (error) {
+        showError('地域データを読み込めませんでした。再読み込みしてください。');
+        return;
+    }
+
     // 入力値の検証
     if (!searchValue) {
         let errorMessage = '';
@@ -35,7 +46,7 @@ async function searchRadioStation() {
                 errorMessage = '免許人名称を入力してください。';
                 break;
             case 'area':
-                errorMessage = '地域を入力してください。';
+                errorMessage = '地域が見つかりません。都道府県名を含む地域名または一覧にある5桁のコードを入力してください。';
                 break;
             case 'callsignToJCC':
                 errorMessage = 'コールサインを入力してください。';
@@ -83,11 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // DOM要素の初期化
     initializeDOM();
 
-    // 市区町村データの読み込み
-    loadCityData();
-
-    // JCCデータの読み込み
-    loadJCCData();
+    // 市区町村と市郡区番号を読み込む
+    areaDataReady = Promise.all([loadCityData(), loadJCCData()]);
+    areaDataReady.catch(error => console.error(error));
 
     console.log('無線局等情報検索アプリが初期化されました');
 });
